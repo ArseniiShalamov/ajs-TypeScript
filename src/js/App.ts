@@ -1,5 +1,5 @@
 import Busket from "./Basket";
-import Movie from "./movie";
+import Movie from "./Movie";
 
 const busket = new Busket();
 const movie = new Movie(

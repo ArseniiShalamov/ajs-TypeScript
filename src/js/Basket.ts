@@ -11,14 +11,9 @@ export default class Busket {
         return [...this._items];
     }
 
-    totalCost() : number {
-        let cost = 0;
-
-        for (let item of this.items) {
-            cost += item.price;
-        }
-        return cost;
-    }
+    totalCost(): number {
+        return this.items.reduce((total, item) => total + item.price, 0);
+    }      
 
     discountPrice(discount : number) : number {
         let cost = this.totalCost();
@@ -27,9 +22,6 @@ export default class Busket {
     }
 
     deleteItem(id : number) : void {
-        const deleteIndex = this._items.findIndex(item => item.id === id);
-        if (deleteIndex !== -1) {
-            this._items.splice(deleteIndex, 1);
-        }
+        this._items = this._items.filter((item: Purchase) => item.id !== id);
     }
 }
