@@ -1,21 +1,29 @@
- const path = require('path');
+const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   mode: 'production',
   entry: './src/index.ts',
-  target: 'web', // явно собираем для браузера
+  target: 'web', // собираем для браузера
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.[contenthash].js',
-    chunkFormat: 'array-push', // чтобы Webpack выбрал формат чанков
+    chunkFormat: 'array-push',
     clean: true,
-    publicPath: '' // относительные пути — удобно для GitHub Pages
+    publicPath: ''
   },
   module: {
     rules: [
-      { test: /\.tsx?$/, use: 'ts-loader', exclude: /node_modules/ },
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: [
+          /node_modules/,
+          /_tests_/,
+          /\.test\.[tj]sx?$/ // не компилируем тесты
+        ]
+      },
       { test: /\.js$/, use: 'babel-loader', exclude: /node_modules/ },
       { test: /\.html$/, use: 'html-loader' },
       { test: /\.css$/, use: [MiniCssExtractPlugin.loader, 'css-loader'] }
