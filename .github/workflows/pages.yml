@@ -2,7 +2,8 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ master, main ]
+  workflow_dispatch:   # ← позволит нажать “Run workflow” вручную
 
 permissions:
   contents: read
@@ -20,18 +21,21 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 20
+      - uses: actions/configure-pages@v5
       - run: npm ci || npm install
       - run: npm run build
+      - run: ls -la
+      - run: ls -la dist
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist   # совпадает с output.path в webpack.config.js
+          path: dist
   deploy:
     needs: build
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
