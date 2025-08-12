@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [ master, main ]
-  workflow_dispatch:   # ← позволит нажать “Run workflow” вручную
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: 20
       - uses: actions/configure-pages@v5
-      - run: npm ci || npm install
+      - run: npm install              
       - run: npm run build
       - run: ls -la
       - run: ls -la dist
