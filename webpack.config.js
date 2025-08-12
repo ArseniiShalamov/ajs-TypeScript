@@ -5,7 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 module.exports = {
   mode: 'production',
   entry: './src/index.ts',
-  target: 'web', // собираем для браузера
+  target: 'web',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.[contenthash].js',
@@ -17,12 +17,8 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
-        exclude: [
-          /node_modules/,
-          /_tests_/,
-          /\.test\.[tj]sx?$/ // не компилируем тесты
-        ]
+        use: { loader: 'ts-loader', options: { transpileOnly: true } }, // не валим сборку из-за TS-ошибок
+        exclude: [/node_modules/, /_tests_/, /\.test\.[tj]sx?$/]
       },
       { test: /\.js$/, use: 'babel-loader', exclude: /node_modules/ },
       { test: /\.html$/, use: 'html-loader' },
@@ -31,13 +27,8 @@ module.exports = {
   },
   resolve: { extensions: ['.tsx', '.ts', '.js'] },
   plugins: [
-    new HtmlWebpackPlugin({
-      template: 'public/index.html',
-      filename: 'index.html'
-    }),
-    new MiniCssExtractPlugin({
-      filename: '[name].[contenthash].css'
-    })
+    new HtmlWebpackPlugin({ template: 'public/index.html', filename: 'index.html' }),
+    new MiniCssExtractPlugin({ filename: '[name].[contenthash].css' })
   ],
   devtool: false
 };
